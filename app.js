@@ -568,20 +568,32 @@ function processOAuthCallback() {
         const refreshToken = params.get('refresh_token');
         const expiresIn = params.get('expires_in');
         if (accessToken) {
-            supabaseClient.auth.setSession({
-                access_token: accessToken,
-                refresh_token: refreshToken,
-                expires_in: Number(expiresIn)
-            }).then(({ data, error }) => {
-                if (error) {
-                    console.error('Failed to set Supabase session:', error);
-                } else {
-                    // Clear hash to avoid reprocessing
+            // Check if session is already active to avoid redundant, failing setSession calls
+            supabaseClient.auth.getSession().then(({ data: { session } }) => {
+                if (session) {
+                    console.log('Session already active. Clearing hash fragment.');
                     window.location.hash = '';
-                    // Hide auth screen and show main app UI
                     document.getElementById('auth-screen')?.classList.add('hidden');
                     document.getElementById('app-container')?.classList.remove('hidden');
+                    return;
                 }
+                
+                // Fallback: set manually if not automatically recovered
+                supabaseClient.auth.setSession({
+                    access_token: accessToken,
+                    refresh_token: refreshToken,
+                    expires_in: Number(expiresIn)
+                }).then(({ data, error }) => {
+                    if (error) {
+                        console.error('Failed to set Supabase session:', error);
+                    } else {
+                        // Clear hash to avoid reprocessing
+                        window.location.hash = '';
+                        // Hide auth screen and show main app UI
+                        document.getElementById('auth-screen')?.classList.add('hidden');
+                        document.getElementById('app-container')?.classList.remove('hidden');
+                    }
+                });
             });
         }
     }
