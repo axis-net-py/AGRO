@@ -1,0 +1,17 @@
+{
+  "name": "aurelius",
+  "version": "1.0.0",
+  "description": "Aurelius – Cultivando o Futuro – agricultural management web app",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "postinstall": "chmod +x ./node_modules/.bin/vite"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0"
+  },
+  "devDependencies": {
+    "vite": "^5.2.0"
+  }
+}
