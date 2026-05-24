@@ -212,7 +212,7 @@
             
             <!-- Auth Form -->
             <div class="mb-4">
-                <button type="button" id="auth-google-btn" class="social-btn google-btn w-full py-3 rounded-xl border border-outline-variant hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 bg-white text-on-surface hover:bg-slate-50 shadow-sm" onclick="loginWithOAuth('google')">
+                <button type="button" id="auth-google-btn" class="btn btn-secondary btn-lg google-btn w-full flex items-center justify-center gap-2" onclick="loginWithOAuth('google')">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo" width="18" height="18" class="object-contain" />
                     <span class="text-sm font-semibold">Entrar com o Google</span>
                 </button>
@@ -241,14 +241,14 @@
                     </div>
                 </div>
 
-                <button type="submit" id="auth-submit-btn" class="btn btn-primary w-full py-3.5 flex items-center justify-center gap-2">
+                <button type="submit" id="auth-submit-btn" class="btn btn-primary btn-lg w-full flex items-center justify-center gap-2">
                     <span class="material-symbols-outlined text-[20px]">login</span>
                     <span id="auth-submit-text" data-i18n="btn_login">Entrar no Sistema</span>
                 </button>
             </form>
             
             <div class="mt-6 text-center text-body-sm text-on-surface-variant opacity-60">
-                <span data-i18n="auth_note">© 2026 AXIS - Soluciones Digitales.<br>Todos los derechos reservados.</span>
+                <span data-i18n="auth_note">© 2026 AXIS - Soluciones Digitales.<br>Todos los direitos reservados.</span>
             </div>
 
             <!-- Supabase Config Drawer -->
@@ -270,10 +270,10 @@
                         <input type="password" id="auth-sb-key" class="form-input w-full font-label-md" placeholder="sua-chave-anon-public-key" />
                     </div>
                     <div class="flex gap-3 mt-2">
-                        <button type="button" class="btn btn-primary flex-1 py-2.5 text-sm font-semibold" onclick="saveAuthSupabaseSettings()">
+                        <button type="button" class="btn btn-primary flex-1" onclick="saveAuthSupabaseSettings()">
                             Salvar
                         </button>
-                        <button type="button" class="btn btn-outline border border-outline-variant text-on-surface hover:bg-surface-container/50 px-4 py-2.5 text-sm font-semibold rounded-xl" onclick="toggleAuthSupabaseDrawer()">
+                        <button type="button" class="btn btn-secondary flex-1" onclick="toggleAuthSupabaseDrawer()">
                             Cancelar
                         </button>
                     </div>
@@ -337,11 +337,11 @@
             </nav>
             
             <div class="mt-auto pt-2 border-t border-outline-variant flex flex-col gap-1">
-                <button class="btn btn-secondary w-full py-1.5 rounded-xl font-label-md flex items-center justify-center gap-2 hover:opacity-90 transition-opacity" onclick="openModal('modal-add-insumo-aplicacao')">
+                <button class="btn btn-secondary w-full flex items-center justify-center gap-2" onclick="openModal('modal-add-insumo-aplicacao')">
                     <span class="material-symbols-outlined text-[18px]">add_circle</span>
                     <span data-i18n="btn_quick_apply">Aplicar Defensivo</span>
                 </button>
-                <button class="btn btn-primary w-full py-1.5 rounded-xl font-label-md flex items-center justify-center gap-2 hover:opacity-90 transition-opacity" onclick="openModal('modal-add-financa')">
+                <button class="btn btn-primary w-full flex items-center justify-center gap-2" onclick="openModal('modal-add-financa')">
                     <span class="material-symbols-outlined text-[18px]">payments</span>
                     <span data-i18n="btn_quick_expense">Lançar Caixa</span>
                 </button>
@@ -425,7 +425,7 @@
                         <p class="text-xs opacity-80" data-i18n="demo_banner_desc">Os dados estão salvos no seu celular/navegador. Conecte seu Supabase nas Configurações para salvar na nuvem.</p>
                     </div>
                 </div>
-                <button class="btn btn-primary text-xs py-1.5 px-3 rounded-lg" onclick="switchTab('configuracoes')" data-i18n="btn_connect_supabase">Configurar Supabase</button>
+                <button class="btn btn-primary btn-sm" onclick="switchTab('configuracoes')" data-i18n="btn_connect_supabase">Configurar Supabase</button>
             </div>
 
             <!-- ================= VIEW 1: DASHBOARD ================= -->
@@ -537,7 +537,7 @@
                                     <span class="font-data-numeral text-sm font-bold text-primary flex items-center gap-0.5">0.84 <span class="material-symbols-outlined text-[14px]">trending_up</span></span>
                                 </div>
                             </div>
-                            <button class="btn btn-secondary py-1.5 px-3 text-xs" onclick="switchTab('talhoes')" data-i18n="btn_manage_plots">Gerenciar Áreas</button>
+                            <button class="btn btn-secondary btn-sm" onclick="switchTab('talhoes')" data-i18n="btn_manage_plots">Gerenciar Áreas</button>
                         </div>
                     </div>
                     
@@ -1314,7 +1314,7 @@
                                 <span class="material-symbols-outlined text-[18px]">mic</span>
                             </button>
                         </div>
-                        <button class="btn btn-primary flex items-center gap-2 px-5 py-3 rounded-xl font-bold shrink-0" onclick="executeReportAICommand()">
+                        <button class="btn btn-primary btn-lg shrink-0" onclick="executeReportAICommand()">
                             <span class="material-symbols-outlined text-[20px]">play_arrow</span>
                             <span data-i18n="btn_execute">Executar</span>
                         </button>
@@ -1334,7 +1334,7 @@
                                 <div class="w-1 bg-primary rounded-full animate-bounce h-6" style="animation-delay:0.4s"></div>
                                 <div class="w-1 bg-primary rounded-full animate-bounce h-2" style="animation-delay:0.5s"></div>
                             </div>
-                            <button class="btn btn-secondary py-1.5 px-3 text-xs" onclick="toggleReportVoiceInput()">Cancelar</button>
+                            <button class="btn btn-secondary btn-sm" onclick="toggleReportVoiceInput()">Cancelar</button>
                         </div>
                     </div>
                 </div>
@@ -1389,11 +1389,11 @@
 
                         <!-- Actions -->
                         <div class="flex gap-2 w-full sm:w-auto">
-                            <button class="btn btn-secondary flex items-center justify-center gap-1.5 py-2 px-4 rounded-xl font-bold flex-grow sm:flex-grow-0 border border-outline-variant shadow-sm" onclick="printActiveReport()">
+                            <button class="btn btn-secondary flex-grow sm:flex-grow-0" onclick="printActiveReport()">
                                 <span class="material-symbols-outlined text-[18px]">print</span>
                                 <span data-i18n="btn_print">Imprimir Relatório</span>
                             </button>
-                            <button class="btn btn-primary flex items-center justify-center gap-1.5 py-2 px-5 rounded-xl font-bold flex-grow sm:flex-grow-0" onclick="triggerManualReportGeneration()">
+                            <button class="btn btn-primary flex-grow sm:flex-grow-0" onclick="triggerManualReportGeneration()">
                                 <span class="material-symbols-outlined text-[18px]">refresh</span>
                                 <span data-i18n="btn_generate">Gerar Relatório</span>
                             </button>
@@ -1526,7 +1526,7 @@
                             <input type="text" id="cfg-profile-name" class="form-input" placeholder="Ex: Marcos Agro" value="Produtor Rural"/>
                         </div>
 
-                        <button class="btn btn-primary w-full py-3 font-bold mt-2 shadow-sm flex items-center justify-center gap-2 hover:shadow transition-all" onclick="saveUserProfile()">
+                        <button class="btn btn-primary btn-lg w-full mt-2" onclick="saveUserProfile()">
                             <span class="material-symbols-outlined text-[20px]">save</span>
                             <span data-i18n="btn_save_profile">Salvar Perfil</span>
                         </button>
@@ -1551,8 +1551,8 @@
                                 </div>
                             </div>
                             <div class="flex flex-col sm:flex-row gap-2 mt-2">
-                                <button class="btn btn-secondary flex-grow py-2.5 font-bold" onclick="saveExchangeRates()" data-i18n="btn_save_rates">Atualizar Taxas</button>
-                                <button class="btn btn-primary flex-grow py-2.5 flex items-center justify-center gap-2 font-bold shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-[0.98]" onclick="updateExchangeRatesRealTime(false)" id="btn-sync-rates-realtime">
+                                <button class="btn btn-secondary flex-grow" onclick="saveExchangeRates()" data-i18n="btn_save_rates">Atualizar Taxas</button>
+                                <button class="btn btn-primary flex-grow" onclick="updateExchangeRatesRealTime(false)" id="btn-sync-rates-realtime">
                                     <span class="material-symbols-outlined text-[18px] animate-spin-slow">sync</span>
                                     <span data-i18n="btn_sync_rates_realtime">Obter Câmbio Real</span>
                                 </button>
@@ -1581,10 +1581,10 @@
                             </div>
 
                             <div class="flex flex-col sm:flex-row gap-2 mt-2">
-                                <button class="btn btn-primary flex-grow py-2.5 font-bold shadow-md hover:shadow-lg transition-all" onclick="saveSupabaseSettings()">
+                                <button class="btn btn-primary flex-grow" onclick="saveSupabaseSettings()">
                                     Salvar & Conectar
                                 </button>
-                                <button id="btn-disconnect-sb" class="btn btn-secondary flex-grow py-2.5 font-bold text-error border border-error/20 hover:bg-error/10 hover:border-error/50 transition-all rounded-xl hidden" onclick="disconnectSupabase()">
+                                <button id="btn-disconnect-sb" class="btn btn-danger flex-grow hidden" onclick="disconnectSupabase()">
                                     Desconectar
                                 </button>
                             </div>
@@ -1608,12 +1608,12 @@
 
                             <!-- Action Buttons -->
                             <div class="flex flex-col gap-3">
-                                <button class="btn btn-secondary py-3 w-full flex items-center justify-center gap-2 text-error font-bold border border-error/20 hover:bg-error/10 hover:border-error/50 transition-all rounded-xl shadow-sm" onclick="resetLocalDatabase()">
+                                <button class="btn btn-danger btn-lg w-full" onclick="resetLocalDatabase()">
                                     <span class="material-symbols-outlined text-[20px]">delete_forever</span>
                                     <span data-i18n="btn_reset_database">Limpar Todo o Banco de Dados</span>
                                 </button>
                                 
-                                <button class="btn btn-secondary py-3 w-full flex items-center justify-center gap-2 font-bold transition-all rounded-xl shadow-sm" onclick="toggleLayoutModeOffline()">
+                                <button class="btn btn-secondary btn-lg w-full" onclick="toggleLayoutModeOffline()">
                                     <span class="material-symbols-outlined text-[20px]">devices</span>
                                     <span data-i18n="btn_toggle_layout">Alternar Aparência (Celular/Painel)</span>
                                 </button>
@@ -1781,7 +1781,7 @@
                 </select>
             </div>
             
-            <button type="submit" class="btn btn-primary w-full py-3 font-bold" data-i18n="btn_save">Salvar Registro</button>
+            <button type="submit" class="btn btn-primary btn-lg w-full" data-i18n="btn_save">Salvar Registro</button>
         </form>
     </div>
 
@@ -1821,7 +1821,7 @@
                 <input type="number" min="0" max="100" id="mach-fuel" value="100" required class="form-input text-right"/>
             </div>
             
-            <button type="submit" class="btn btn-primary w-full py-3 font-bold" data-i18n="btn_save">Salvar Registro</button>
+            <button type="submit" class="btn btn-primary btn-lg w-full" data-i18n="btn_save">Salvar Registro</button>
         </form>
     </div>
 
@@ -1869,7 +1869,7 @@
                 </div>
             </div>
             
-            <button type="submit" class="btn btn-primary w-full py-3 font-bold" data-i18n="btn_save">Salvar Registro</button>
+            <button type="submit" class="btn btn-primary btn-lg w-full" data-i18n="btn_save">Salvar Registro</button>
         </form>
     </div>
 
@@ -1917,7 +1917,7 @@
                 </div>
             </div>
             
-            <button type="submit" class="btn btn-primary w-full py-3 font-bold" data-i18n="btn_save">Salvar Registro</button>
+            <button type="submit" class="btn btn-primary btn-lg w-full" data-i18n="btn_save">Salvar Registro</button>
         </form>
     </div>
 
@@ -1971,7 +1971,7 @@
                 <p class="text-[9px] text-on-surface-variant opacity-60 mt-2">Se informado, será lançado automaticamente como despesa no financeiro.</p>
             </div>
             
-            <button type="submit" class="btn btn-primary w-full py-3 font-bold" data-i18n="btn_save">Salvar Insumo</button>
+            <button type="submit" class="btn btn-primary btn-lg w-full" data-i18n="btn_save">Salvar Insumo</button>
         </form>
     </div>
 
@@ -2010,7 +2010,7 @@
                 </div>
             </div>
             
-            <button type="submit" class="btn btn-primary w-full py-3 font-bold" data-i18n="btn_save">Confirmar Aplicação</button>
+            <button type="submit" class="btn btn-primary btn-lg w-full" data-i18n="btn_save">Confirmar Aplicação</button>
         </form>
     </div>
 
@@ -2092,7 +2092,7 @@
                 </div>
             </div>
             
-            <button type="submit" class="btn btn-primary w-full py-3 font-bold" data-i18n="btn_save">Gravar Lançamento</button>
+            <button type="submit" class="btn btn-primary btn-lg w-full" data-i18n="btn_save">Gravar Lançamento</button>
         </form>
     </div>
 
@@ -2153,11 +2153,11 @@
                 <p class="text-sm text-on-surface-variant" id="gps-modal-desc">O Aurelius pode usar sua localização real para mostrar a previsão do tempo exata do seu campo. Deseja ativar?</p>
             </div>
             <div class="flex flex-col gap-3 w-full mt-2">
-                <button class="btn btn-primary w-full py-3 font-bold flex items-center justify-center gap-2" onclick="acceptGPSPermission()">
+                <button class="btn btn-primary btn-lg w-full flex items-center justify-center gap-2" onclick="acceptGPSPermission()">
                     <span class="material-symbols-outlined text-[18px]">gps_fixed</span>
                     <span id="gps-modal-btn-yes">Sim, usar minha localização</span>
                 </button>
-                <button class="btn btn-secondary w-full py-2.5" onclick="denyGPSPermission()">
+                <button class="btn btn-secondary btn-lg w-full" onclick="denyGPSPermission()">
                     <span id="gps-modal-btn-no">Não, usar localização padrão</span>
                 </button>
             </div>
@@ -2229,7 +2229,7 @@
                 <label for="seed-grain-auto-tx" class="text-xs font-bold text-on-surface-variant" data-i18n="label_seed_grain_auto_tx">Lançar transação no Livro Caixa</label>
             </div>
             
-            <button type="submit" class="btn btn-primary w-full py-3 font-bold" data-i18n="btn_save">Salvar Registro</button>
+            <button type="submit" class="btn btn-primary btn-lg w-full" data-i18n="btn_save">Salvar Registro</button>
         </form>
     </div>
 
@@ -2264,7 +2264,7 @@
                 <label for="safra-activate" class="text-xs font-bold text-on-surface-variant" data-i18n="label_safra_activate">Ativar esta safra imediatamente</label>
             </div>
             
-            <button type="submit" class="btn btn-primary w-full py-3 font-bold" data-i18n="btn_save">Salvar Registro</button>
+            <button type="submit" class="btn btn-primary btn-lg w-full" data-i18n="btn_save">Salvar Registro</button>
         </form>
     </div>
 
