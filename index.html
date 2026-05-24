@@ -195,7 +195,7 @@
     <!-- ================= AUTH CONTAINER ================= -->
     <div id="auth-screen" class="fixed inset-0 z-[100] flex items-start sm:items-center justify-center bg-gradient-to-br py-8 px-4 overflow-y-auto">
         <div class="auth-card w-full max-w-md bg-surface-container-lowest border border-outline-variant p-8 rounded-2xl shadow-2xl relative overflow-hidden">
-            <button id="auth-config-toggle" class="absolute top-4 right-4 text-on-surface-variant/75 hover:text-primary transition-all p-1.5 rounded-lg bg-surface-container/30 border border-outline-variant/50 hover:bg-primary/10 hover:border-primary flex items-center justify-center" onclick="toggleAuthSupabaseDrawer()" title="Configurar Supabase">
+            <button id="auth-config-toggle" class="absolute top-4 right-4 text-on-surface-variant/75 hover:text-primary transition-all p-1.5 rounded-full bg-surface-container/30 border border-outline-variant/50 hover:bg-primary/10 hover:border-primary flex items-center justify-center" onclick="toggleAuthSupabaseDrawer()" title="Configurar Supabase">
                 <span class="material-symbols-outlined text-[20px]">settings</span>
             </button>
 
@@ -1310,7 +1310,7 @@
                     <div class="flex gap-2">
                         <div class="relative flex-grow">
                             <input type="text" id="report-ai-input" class="form-input w-full pr-12 font-body-md text-sm border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary rounded-xl" placeholder="Ex: 'Gere um relatório de caixa de maio'..." data-i18n-placeholder="ai_command_placeholder" onkeydown="handleReportAIKey(event)"/>
-                            <button id="report-mic-btn" class="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary transition-all p-1 rounded-lg bg-surface-container/30 border border-outline-variant/30 hover:bg-primary/10 hover:border-primary flex items-center justify-center cursor-pointer" onclick="toggleReportVoiceInput()" title="Comando de voz">
+                            <button id="report-mic-btn" class="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary transition-all p-1 rounded-full bg-surface-container/30 border border-outline-variant/30 hover:bg-primary/10 hover:border-primary flex items-center justify-center cursor-pointer" onclick="toggleReportVoiceInput()" title="Comando de voz">
                                 <span class="material-symbols-outlined text-[18px]">mic</span>
                             </button>
                         </div>
@@ -1380,11 +1380,11 @@
                         <!-- Quick Ranges -->
                         <div class="flex flex-wrap gap-1.5 items-center">
                             <span class="text-xs font-bold text-on-surface-variant mr-1" data-i18n="lbl_quick_ranges">Períodos Rápidos:</span>
-                            <button class="bg-surface-container hover:bg-primary/10 hover:text-primary text-[11px] font-semibold px-2.5 py-1.5 rounded-lg border border-outline-variant/40 transition-colors cursor-pointer" onclick="setReportQuickRange('este_mes')">Este Mês</button>
-                            <button class="bg-surface-container hover:bg-primary/10 hover:text-primary text-[11px] font-semibold px-2.5 py-1.5 rounded-lg border border-outline-variant/40 transition-colors cursor-pointer" onclick="setReportQuickRange('mes_passado')">Mês Passado</button>
-                            <button class="bg-surface-container hover:bg-primary/10 hover:text-primary text-[11px] font-semibold px-2.5 py-1.5 rounded-lg border border-outline-variant/40 transition-colors cursor-pointer" onclick="setReportQuickRange('3_meses')">3 Meses</button>
-                            <button class="bg-surface-container hover:bg-primary/10 hover:text-primary text-[11px] font-semibold px-2.5 py-1.5 rounded-lg border border-outline-variant/40 transition-colors cursor-pointer" onclick="setReportQuickRange('ano_atual')">Ano Atual</button>
-                            <button class="bg-surface-container hover:bg-primary/10 hover:text-primary text-[11px] font-semibold px-2.5 py-1.5 rounded-lg border border-outline-variant/40 transition-colors cursor-pointer" onclick="setReportQuickRange('tudo')">Limpar Filtros</button>
+                            <button class="bg-surface-container hover:bg-primary/10 hover:text-primary text-[11px] font-semibold px-2.5 py-1.5 rounded-full border border-outline-variant/40 transition-colors cursor-pointer" onclick="setReportQuickRange('este_mes')">Este Mês</button>
+                            <button class="bg-surface-container hover:bg-primary/10 hover:text-primary text-[11px] font-semibold px-2.5 py-1.5 rounded-full border border-outline-variant/40 transition-colors cursor-pointer" onclick="setReportQuickRange('mes_passado')">Mês Passado</button>
+                            <button class="bg-surface-container hover:bg-primary/10 hover:text-primary text-[11px] font-semibold px-2.5 py-1.5 rounded-full border border-outline-variant/40 transition-colors cursor-pointer" onclick="setReportQuickRange('3_meses')">3 Meses</button>
+                            <button class="bg-surface-container hover:bg-primary/10 hover:text-primary text-[11px] font-semibold px-2.5 py-1.5 rounded-full border border-outline-variant/40 transition-colors cursor-pointer" onclick="setReportQuickRange('ano_atual')">Ano Atual</button>
+                            <button class="bg-surface-container hover:bg-primary/10 hover:text-primary text-[11px] font-semibold px-2.5 py-1.5 rounded-full border border-outline-variant/40 transition-colors cursor-pointer" onclick="setReportQuickRange('tudo')">Limpar Filtros</button>
                         </div>
 
                         <!-- Actions -->
