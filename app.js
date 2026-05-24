@@ -295,7 +295,30 @@ const translations = {
         rep_active_plots: 'Talhões Ativos',
         rep_active_machinery: 'Máquinas Ativas',
         rep_active_staff: 'Funcionários Ativos',
-        rep_all: 'Todos'
+        rep_all: 'Todos',
+        rep_mod_financeiro: 'Finanças / Caixa',
+        rep_mod_insumos: 'Defensivos / Insumos',
+        rep_mod_combustivel: 'Uso de Combustível',
+        rep_mod_producao: 'Colheitas e Produção',
+        rep_mod_cadastros: 'Cadastro Geral (Ativos)',
+        rep_mod_frota: 'Frota & Maquinários (Custos)',
+        rep_mod_equipe: 'Equipe & Colaboradores (Folha/Custos)',
+        rep_fleet_title: 'Relatório de Frota & Maquinários',
+        rep_staff_title: 'Relatório de Equipe & Colaboradores',
+        rep_fleet_kpi_fuel: 'Combustível Total',
+        rep_fleet_kpi_maintenance: 'Manutenção & Peças',
+        rep_fleet_kpi_total: 'Gasto Total Frota',
+        rep_staff_kpi_total: 'Total Pago (Equipe)',
+        rep_staff_kpi_clt: 'Mensalistas (CLT)',
+        rep_staff_kpi_diarista: 'Diaristas & Horistas',
+        rep_th_machine: 'Veículo / Máquina',
+        rep_th_staff: 'Colaborador',
+        rep_th_type: 'Tipo de Registro',
+        rep_th_wage_type: 'Vínculo',
+        rep_type_refuel: 'Abastecimento',
+        rep_type_maintenance: 'Manutenção',
+        rep_type_repair: 'Reparo',
+        rep_type_parts: 'Peças / Reposição'
     },
     'es-PY': {
         auth_title: 'Aurelius',
@@ -587,7 +610,30 @@ const translations = {
         rep_active_plots: 'Lotes Activos',
         rep_active_machinery: 'Máquinas Activas',
         rep_active_staff: 'Personal Activo',
-        rep_all: 'Todos'
+        rep_all: 'Todos',
+        rep_mod_financeiro: 'Finanzas / Caja',
+        rep_mod_insumos: 'Defensivos / Agroquímicos',
+        rep_mod_combustivel: 'Consumo de Gasoil',
+        rep_mod_producao: 'Cosechas y Producción',
+        rep_mod_cadastros: 'Registros Generales (Activos)',
+        rep_mod_frota: 'Flota y Maquinarias (Costos)',
+        rep_mod_equipe: 'Personal y Colaboradores (Pagos/Costos)',
+        rep_fleet_title: 'Reporte de Flota y Maquinarias',
+        rep_staff_title: 'Reporte de Personal y Colaboradores',
+        rep_fleet_kpi_fuel: 'Combustible Total',
+        rep_fleet_kpi_maintenance: 'Mantenimiento y Repuestos',
+        rep_fleet_kpi_total: 'Gasto Total Flota',
+        rep_staff_kpi_total: 'Total Pagado (Personal)',
+        rep_staff_kpi_clt: 'Mensualistas (CLT)',
+        rep_staff_kpi_diarista: 'Jornaleros y Horistas',
+        rep_th_machine: 'Vehículo / Máquina',
+        rep_th_staff: 'Colaborador',
+        rep_th_type: 'Tipo de Registro',
+        rep_th_wage_type: 'Vínculo',
+        rep_type_refuel: 'Abastecimiento',
+        rep_type_maintenance: 'Mantenimiento',
+        rep_type_repair: 'Reparación',
+        rep_type_parts: 'Repuestos / Piezas'
     }
 };
 
@@ -5561,6 +5607,27 @@ function populateReportEntitySelect(module) {
             catGroup.appendChild(opt);
         });
         entitySelect.appendChild(catGroup);
+    } else if (module === 'frota') {
+        const machGroup = document.createElement('optgroup');
+        machGroup.label = currentLanguage === 'pt-BR' ? 'Veículos e Frota' : 'Vehículos y Flota';
+        db.machinery.forEach(m => {
+            const opt = document.createElement('option');
+            opt.value = `mach-${m.id}`;
+            opt.textContent = `${m.name} (${m.type})`;
+            machGroup.appendChild(opt);
+        });
+        entitySelect.appendChild(machGroup);
+        
+    } else if (module === 'equipe') {
+        const staffGroup = document.createElement('optgroup');
+        staffGroup.label = currentLanguage === 'pt-BR' ? 'Colaboradores e Diaristas' : 'Personal y Diaristas';
+        db.staff.forEach(s => {
+            const opt = document.createElement('option');
+            opt.value = `staff-${s.id}`;
+            opt.textContent = `${s.name} (${s.role})`;
+            staffGroup.appendChild(opt);
+        });
+        entitySelect.appendChild(staffGroup);
     }
 }
 
@@ -6117,6 +6184,329 @@ function generateReport(module, startDate, endDate, specificEntity) {
                 const staffData = db.staff.map(s => ({ label: s.name, value: convertValue(s.wage_rate, s.currency, 'BRL') }));
                 chartContainer.innerHTML = drawSvgBarChart(staffData);
             }
+        }
+    } else if (module === 'frota') {
+        if (titleEl) titleEl.textContent = translations[currentLanguage].rep_fleet_title;
+        if (headerIcon) headerIcon.textContent = 'local_shipping';
+
+        let targetMachId = null;
+        if (specificEntity && specificEntity.startsWith('mach-')) {
+            targetMachId = specificEntity.substring(5);
+        }
+
+        let machinesToReport = db.machinery;
+        if (targetMachId) {
+            machinesToReport = db.machinery.filter(m => m.id === targetMachId);
+        }
+
+        let filteredFuelLogs = db.fuelLogs.filter(f => {
+            if (startDate && f.date < startDate) return false;
+            if (endDate && f.date > endDate) return false;
+            
+            if (targetMachId) {
+                const mach = db.machinery.find(m => m.id === targetMachId);
+                if (f.mach_id) {
+                    return f.mach_id === targetMachId;
+                } else if (mach) {
+                    return f.desc.toLowerCase().includes(mach.name.toLowerCase());
+                }
+                return false;
+            }
+            return true;
+        });
+
+        const maintKeywords = ['manutenção', 'manutencao', 'peça', 'peca', 'reparo', 'oficina', 'conserto', 'pneu', 'lubrificante', 'graxa', 'reparação', 'repuestos', 'taller', 'mecánico', 'mecânico'];
+        
+        let filteredMaintTx = db.transactions.filter(t => {
+            if (t.type !== 'gasto') return false;
+            if (startDate && t.date < startDate) return false;
+            if (endDate && t.date > endDate) return false;
+            if (t.category === 'Combustível') return false; 
+
+            let matchesMachine = false;
+            for (let m of machinesToReport) {
+                if (t.description.toLowerCase().includes(m.name.toLowerCase())) {
+                    matchesMachine = true;
+                    break;
+                }
+            }
+
+            if (targetMachId) {
+                return matchesMachine;
+            }
+
+            if (matchesMachine) return true;
+            
+            if (t.category === 'Outros' || t.category === 'Otras Operaciones') {
+                const descLower = t.description.toLowerCase();
+                return maintKeywords.some(kw => descLower.includes(kw));
+            }
+
+            return false;
+        });
+
+        let totalFuelLiters = 0;
+        let totalFuelCostBrl = 0;
+        filteredFuelLogs.forEach(f => {
+            totalFuelLiters += f.amount_liters;
+            totalFuelCostBrl += convertValue(f.cost_value, f.currency, 'BRL');
+        });
+
+        let totalMaintCostBrl = 0;
+        filteredMaintTx.forEach(t => {
+            totalMaintCostBrl += convertValue(t.amount, t.currency, 'BRL');
+        });
+
+        const totalFleetCostBrl = totalFuelCostBrl + totalMaintCostBrl;
+
+        kpiGrid.innerHTML = `
+            <div class="bg-primary-container/20 border border-primary-container/40 p-4 rounded-xl shadow-sm">
+                <span class="text-[10px] text-on-surface-variant font-bold block uppercase">${translations[currentLanguage].rep_fleet_kpi_fuel}</span>
+                <span class="font-data-numeral text-lg font-bold text-primary block">${totalFuelLiters} L / ${formatCurrency(totalFuelCostBrl, 'BRL')}</span>
+            </div>
+            <div class="bg-surface-container-high border border-outline-variant p-4 rounded-xl shadow-sm">
+                <span class="text-[10px] text-on-surface-variant font-bold block uppercase">${translations[currentLanguage].rep_fleet_kpi_maintenance}</span>
+                <span class="font-data-numeral text-lg font-bold block text-error">${formatCurrency(totalMaintCostBrl, 'BRL')}</span>
+            </div>
+            <div class="bg-error-container/20 border border-error-container/40 p-4 rounded-xl shadow-sm">
+                <span class="text-[10px] text-on-surface-variant font-bold block uppercase">${translations[currentLanguage].rep_fleet_kpi_total}</span>
+                <span class="font-data-numeral text-lg font-bold block text-error">${formatCurrency(totalFleetCostBrl, 'BRL')}</span>
+            </div>
+        `;
+
+        tableHeader.innerHTML = `
+            <th class="p-3">${isPt ? 'Data' : 'Fecha'}</th>
+            <th class="p-3">${translations[currentLanguage].rep_th_machine}</th>
+            <th class="p-3">${translations[currentLanguage].rep_th_type}</th>
+            <th class="p-3">${isPt ? 'Descrição' : 'Descripción'}</th>
+            <th class="p-3 text-right">${isPt ? 'Custo Original' : 'Costo Original'}</th>
+            <th class="p-3 text-right">${isPt ? 'Equiv. BRL' : 'Equiv. BRL'}</th>
+        `;
+
+        let combinedItems = [];
+        
+        filteredFuelLogs.forEach(f => {
+            const mach = db.machinery.find(m => m.id === f.mach_id);
+            const machName = mach ? mach.name : (f.mach_id ? f.mach_id : (isPt ? 'Geral' : 'General'));
+            combinedItems.push({
+                date: f.date,
+                entityName: machName,
+                type: translations[currentLanguage].rep_type_refuel,
+                description: f.desc,
+                originalVal: f.cost_value,
+                currency: f.currency,
+                valBrl: convertValue(f.cost_value, f.currency, 'BRL'),
+                isFuel: true
+            });
+        });
+
+        filteredMaintTx.forEach(t => {
+            let machName = isPt ? 'Geral' : 'General';
+            for (let m of db.machinery) {
+                if (t.description.toLowerCase().includes(m.name.toLowerCase())) {
+                    machName = m.name;
+                    break;
+                }
+            }
+            
+            let typeLabel = translations[currentLanguage].rep_type_maintenance;
+            const descLower = t.description.toLowerCase();
+            if (descLower.includes('peça') || descLower.includes('peca') || descLower.includes('repuesto') || descLower.includes('pneu') || descLower.includes('filtro') || descLower.includes('óleo') || descLower.includes('oleo') || descLower.includes('lubrificante') || descLower.includes('graxa')) {
+                typeLabel = translations[currentLanguage].rep_type_parts;
+            } else if (descLower.includes('reparo') || descLower.includes('conserto') || descLower.includes('reparación') || descLower.includes('oficina') || descLower.includes('taller')) {
+                typeLabel = translations[currentLanguage].rep_type_repair;
+            }
+
+            combinedItems.push({
+                date: t.date,
+                entityName: machName,
+                type: typeLabel,
+                description: t.description,
+                originalVal: t.amount,
+                currency: t.currency,
+                valBrl: convertValue(t.amount, t.currency, 'BRL'),
+                isFuel: false
+            });
+        });
+
+        combinedItems.sort((a, b) => b.date.localeCompare(a.date));
+
+        if (combinedItems.length === 0) {
+            emptyMsg.classList.remove('hidden');
+        } else {
+            combinedItems.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-surface-container-high/40 transition-colors';
+                
+                const typeText = item.isFuel
+                    ? `<span class="bg-[#10b981]/15 text-[#047857] px-2 py-0.5 rounded text-[10px] font-bold uppercase">${item.type}</span>`
+                    : `<span class="bg-tertiary/15 text-tertiary-fixed-dim dark:text-tertiary px-2 py-0.5 rounded text-[10px] font-bold uppercase">${item.type}</span>`;
+                
+                tr.innerHTML = `
+                    <td class="p-3 font-semibold font-data-numeral">${item.date}</td>
+                    <td class="p-3 font-bold text-on-surface-variant">${escapeHTML(item.entityName)}</td>
+                    <td class="p-3">${typeText}</td>
+                    <td class="p-3">${escapeHTML(item.description)}</td>
+                    <td class="p-3 text-right font-semibold">${item.originalVal > 0 ? formatCurrency(item.originalVal, item.currency) : '-'}</td>
+                    <td class="p-3 text-right font-bold text-error">${item.originalVal > 0 ? formatCurrency(item.valBrl, 'BRL') : '-'}</td>
+                `;
+                tableBody.appendChild(tr);
+            });
+
+            const machCosts = {};
+            combinedItems.forEach(item => {
+                machCosts[item.entityName] = (machCosts[item.entityName] || 0) + item.valBrl;
+            });
+
+            const chartData = Object.keys(machCosts).map(k => ({ label: k, value: machCosts[k] }));
+            chartData.sort((a, b) => b.value - a.value);
+            chartContainer.innerHTML = drawSvgBarChart(chartData.slice(0, 10));
+        }
+
+    } else if (module === 'equipe') {
+        if (titleEl) titleEl.textContent = translations[currentLanguage].rep_staff_title;
+        if (headerIcon) headerIcon.textContent = 'groups';
+
+        let targetStaffId = null;
+        if (specificEntity && specificEntity.startsWith('staff-')) {
+            targetStaffId = specificEntity.substring(6);
+        }
+
+        let staffToReport = db.staff;
+        if (targetStaffId) {
+            staffToReport = db.staff.filter(s => s.id === targetStaffId);
+        }
+
+        let filteredStaffTx = db.transactions.filter(t => {
+            if (t.type !== 'gasto') return false;
+            if (startDate && t.date < startDate) return false;
+            if (endDate && t.date > endDate) return false;
+
+            let matchesStaff = false;
+            for (let s of staffToReport) {
+                if (t.description.toLowerCase().includes(s.name.toLowerCase())) {
+                    matchesStaff = true;
+                    break;
+                }
+            }
+
+            if (targetStaffId) {
+                return matchesStaff;
+            }
+
+            return matchesStaff || t.category === 'Funcionários';
+        });
+
+        let totalPaidBrl = 0;
+        let totalCltBrl = 0;
+        let totalDiaristaBrl = 0;
+
+        let tableRows = [];
+
+        filteredStaffTx.forEach(t => {
+            const valBrl = convertValue(t.amount, t.currency, 'BRL');
+            totalPaidBrl += valBrl;
+
+            let matchedStaff = null;
+            for (let s of db.staff) {
+                if (t.description.toLowerCase().includes(s.name.toLowerCase())) {
+                    matchedStaff = s;
+                    break;
+                }
+            }
+
+            let isClt = true; 
+            let staffName = matchedStaff ? matchedStaff.name : (isPt ? 'Geral / Equipe' : 'General / Personal');
+            let vínculoLabel = '';
+
+            if (matchedStaff) {
+                const typeLower = matchedStaff.type.toLowerCase();
+                if (typeLower.includes('diarista') || typeLower.includes('jornalero') || typeLower.includes('horista')) {
+                    isClt = false;
+                }
+            } else {
+                const descLower = t.description.toLowerCase();
+                if (descLower.includes('diaria') || descLower.includes('diária') || descLower.includes('jornal') || descLower.includes('dia') || descLower.includes('hora')) {
+                    isClt = false;
+                }
+            }
+
+            if (isClt) {
+                totalCltBrl += valBrl;
+                vínculoLabel = isPt ? 'CLT (Mensalista)' : 'CLT (Mensual)';
+            } else {
+                totalDiaristaBrl += valBrl;
+                vínculoLabel = isPt ? 'Diarista / Horista' : 'Jornalero / Horista';
+            }
+
+            tableRows.push({
+                date: t.date,
+                name: staffName,
+                vinculo: vínculoLabel,
+                description: t.description,
+                originalVal: t.amount,
+                currency: t.currency,
+                valBrl: valBrl,
+                isClt: isClt
+            });
+        });
+
+        kpiGrid.innerHTML = `
+            <div class="bg-primary-container/20 border border-primary-container/40 p-4 rounded-xl shadow-sm">
+                <span class="text-[10px] text-on-surface-variant font-bold block uppercase">${translations[currentLanguage].rep_staff_kpi_total}</span>
+                <span class="font-data-numeral text-lg font-bold text-primary block">${formatCurrency(totalPaidBrl, 'BRL')}</span>
+            </div>
+            <div class="bg-surface-container-high border border-outline-variant p-4 rounded-xl shadow-sm">
+                <span class="text-[10px] text-on-surface-variant font-bold block uppercase">${translations[currentLanguage].rep_staff_kpi_clt}</span>
+                <span class="font-data-numeral text-lg font-bold block text-primary">${formatCurrency(totalCltBrl, 'BRL')}</span>
+            </div>
+            <div class="bg-surface-container-high border border-outline-variant p-4 rounded-xl shadow-sm">
+                <span class="text-[10px] text-on-surface-variant font-bold block uppercase">${translations[currentLanguage].rep_staff_kpi_diarista}</span>
+                <span class="font-data-numeral text-lg font-bold block text-primary">${formatCurrency(totalDiaristaBrl, 'BRL')}</span>
+            </div>
+        `;
+
+        tableHeader.innerHTML = `
+            <th class="p-3">${isPt ? 'Data' : 'Fecha'}</th>
+            <th class="p-3">${translations[currentLanguage].rep_th_staff}</th>
+            <th class="p-3">${translations[currentLanguage].rep_th_wage_type}</th>
+            <th class="p-3">${isPt ? 'Descrição' : 'Descripción'}</th>
+            <th class="p-3 text-right">${isPt ? 'Valor Pago' : 'Monto Pagado'}</th>
+            <th class="p-3 text-right">${isPt ? 'Equiv. BRL' : 'Equiv. BRL'}</th>
+        `;
+
+        tableRows.sort((a, b) => b.date.localeCompare(a.date));
+
+        if (tableRows.length === 0) {
+            emptyMsg.classList.remove('hidden');
+        } else {
+            tableRows.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-surface-container-high/40 transition-colors';
+                
+                const typeText = row.isClt
+                    ? `<span class="bg-[#10b981]/15 text-[#047857] px-2 py-0.5 rounded text-[10px] font-bold uppercase">${row.vinculo}</span>`
+                    : `<span class="bg-tertiary/15 text-tertiary-fixed-dim dark:text-tertiary px-2 py-0.5 rounded text-[10px] font-bold uppercase">${row.vinculo}</span>`;
+                
+                tr.innerHTML = `
+                    <td class="p-3 font-semibold font-data-numeral">${row.date}</td>
+                    <td class="p-3 font-bold text-on-surface-variant">${escapeHTML(row.name)}</td>
+                    <td class="p-3">${typeText}</td>
+                    <td class="p-3">${escapeHTML(row.description)}</td>
+                    <td class="p-3 text-right font-semibold">${formatCurrency(row.originalVal, row.currency)}</td>
+                    <td class="p-3 text-right font-bold text-primary">${formatCurrency(row.valBrl, 'BRL')}</td>
+                `;
+                tableBody.appendChild(tr);
+            });
+
+            const staffCosts = {};
+            tableRows.forEach(row => {
+                staffCosts[row.name] = (staffCosts[row.name] || 0) + row.valBrl;
+            });
+
+            const chartData = Object.keys(staffCosts).map(k => ({ label: k, value: staffCosts[k] }));
+            chartData.sort((a, b) => b.value - a.value);
+            chartContainer.innerHTML = drawSvgBarChart(chartData.slice(0, 10), 'tertiary');
         }
     }
 }
