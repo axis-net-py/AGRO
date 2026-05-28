@@ -288,9 +288,6 @@ importers:
       xmlbuilder:
         specifier: ^15.1.1
         version: 15.1.1
-      zod:
-        specifier: ^3.24.1
-        version: 3.25.76
     devDependencies:
       '@tailwindcss/postcss':
         specifier: ^4.3.0
