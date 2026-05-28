@@ -12,13 +12,13 @@ export default async function FieldsPage({
   const fields = await getFields(tenantId);
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="p-6 space-y-6">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold uppercase tracking-widest text-foreground font-heading">
+          <h1 className="text-2xl font-bold tracking-tight">
             Talhões (Áreas da Fazenda)
           </h1>
-          <p className="text-sm text-muted-foreground uppercase tracking-wider">
+          <p className="text-muted-foreground text-sm">
             Gerencie as dimensões e culturas das áreas de plantio
           </p>
         </div>
